@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit event' if editing else 'Add event' }}{% endblock %}
+{% block content %}
+<h1>{{ 'Edit event' if editing else 'Add event' }}</h1>
+
+<form class="card form" method="post">
+  <label>Event name *
+    <input type="text" name="event_name" maxlength="100" required value="{{ event.event_name or '' }}">
+  </label>
+  <label>Description
+    <textarea name="description" rows="3">{{ event.description or '' }}</textarea>
+  </label>
+  <div class="row">
+    <label>Date *
+      <input type="date" name="event_date" required value="{{ event.event_date or '' }}">
+    </label>
+    <label>Capacity *
+      <input type="number" name="capacity" min="1" required value="{{ event.capacity or '' }}">
+    </label>
+  </div>
+  <div class="row">
+    <label>Venue *
+      <input type="text" name="venue" maxlength="100" required value="{{ event.venue or '' }}">
+    </label>
+    <label>Status
+      <select name="status">
+        {% for s in statuses %}
+          <option value="{{ s }}" {% if event.status == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
+  <div class="actions">
+    <button type="submit">{{ 'Save changes' if editing else 'Create event' }}</button>
+    <a href="{{ url_for('event_detail', event_id=event.event_id) if editing else url_for('events_list') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

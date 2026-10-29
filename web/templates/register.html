@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Register for an event{% endblock %}
+{% block content %}
+<h1>Register a participant for an event</h1>
+
+<form class="card form" method="post">
+  <label>Participant *
+    <select name="participant_id" required>
+      <option value="">-- choose participant --</option>
+      {% for p in participants %}
+        <option value="{{ p.participant_id }}" {% if selected.participant_id == p.participant_id|string %}selected{% endif %}>
+          {{ p.participant_name }} ({{ p.email }})
+        </option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Event *
+    <select name="event_id" required>
+      <option value="">-- choose event --</option>
+      {% for e in events %}
+        <option value="{{ e.event_id }}" {% if selected.event_id == e.event_id|string %}selected{% endif %}>
+          {{ e.event_name }} &mdash; {{ e.event_date.strftime('%d %b %Y') }}
+          ({% if e.available_seats == 0 %}FULL{% else %}{{ e.available_seats }} seats left{% endif %})
+        </option>
+      {% endfor %}
+    </select>
+  </label>
+  <p class="muted">Only upcoming events are listed. Full events are shown so you can see that the
+     database rejects the registration.</p>
+  <div class="actions">
+    <button type="submit">Register</button>
+    <a href="{{ url_for('participant_new') }}">New participant?</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Events{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Events</h1>
+  <a class="btn" href="{{ url_for('event_new') }}">+ Add event</a>
+</div>
+
+<form class="search" method="get">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search by event name or venue">
+  <input type="date" name="date" value="{{ on_date }}">
+  <button type="submit">Search</button>
+  {% if q or on_date %}<a href="{{ url_for('events_list') }}">Clear</a>{% endif %}
+</form>
+
+<table>
+  <thead>
+    <tr><th>ID</th><th>Event</th><th>Date</th><th>Venue</th><th>Status</th>
+        <th class="r">Booked</th><th class="r">Available</th></tr>
+  </thead>
+  <tbody>
+  {% for e in events %}
+    <tr>
+      <td>{{ e.event_id }}</td>
+      <td><a href="{{ url_for('event_detail', event_id=e.event_id) }}">{{ e.event_name }}</a></td>
+      <td>{{ e.event_date.strftime('%d %b %Y') }}</td>
+      <td>{{ e.venue }}</td>
+      <td><span class="badge badge-{{ e.status|lower }}">{{ e.status }}</span></td>
+      <td class="r">{{ e.seats_taken }} / {{ e.capacity }}</td>
+      <td class="r">{{ e.available_seats }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="7" class="muted">No events found.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

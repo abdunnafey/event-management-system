@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Participants{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Participants</h1>
+  <a class="btn" href="{{ url_for('participant_new') }}">+ Add participant</a>
+</div>
+
+<form class="search" method="get">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search by name or email">
+  <button type="submit">Search</button>
+  {% if q %}<a href="{{ url_for('participants_list') }}">Clear</a>{% endif %}
+</form>
+
+<table>
+  <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>College</th><th>Department</th><th class="r">Events</th></tr></thead>
+  <tbody>
+  {% for p in participants %}
+    <tr>
+      <td>{{ p.participant_id }}</td>
+      <td><a href="{{ url_for('participant_detail', participant_id=p.participant_id) }}">{{ p.participant_name }}</a></td>
+      <td>{{ p.email }}</td>
+      <td>{{ p.phone }}</td>
+      <td>{{ p.college }}</td>
+      <td>{{ p.department or '-' }}</td>
+      <td class="r">{{ p.event_count }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="7" class="muted">No participants found.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

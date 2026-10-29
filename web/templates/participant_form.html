@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit participant' if editing else 'Add participant' }}{% endblock %}
+{% block content %}
+<h1>{{ 'Edit participant' if editing else 'Add participant' }}</h1>
+
+<form class="card form" method="post">
+  <label>Full name *
+    <input type="text" name="participant_name" maxlength="100" required value="{{ participant.participant_name or '' }}">
+  </label>
+  <div class="row">
+    <label>Email *
+      <input type="email" name="email" maxlength="100" required value="{{ participant.email or '' }}">
+    </label>
+    <label>Phone (10 digits) *
+      <input type="text" name="phone" pattern="[0-9]{10}" maxlength="10" required value="{{ participant.phone or '' }}">
+    </label>
+  </div>
+  <div class="row">
+    <label>College *
+      <input type="text" name="college" maxlength="150" required value="{{ participant.college or '' }}">
+    </label>
+    <label>Department
+      <input type="text" name="department" maxlength="100" value="{{ participant.department or '' }}">
+    </label>
+  </div>
+  <div class="actions">
+    <button type="submit">{{ 'Save changes' if editing else 'Add participant' }}</button>
+    <a href="{{ url_for('participant_detail', participant_id=participant.participant_id) if editing else url_for('participants_list') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

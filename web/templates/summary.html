@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Registration summary{% endblock %}
+{% block content %}
+<h1>Registration summary</h1>
+
+<div class="stats">
+  {% for s in by_status %}
+    <div class="stat"><span class="num">{{ s.total }}</span><span>{{ s.registration_status }}</span></div>
+  {% endfor %}
+</div>
+
+<h2>Per event</h2>
+<table>
+  <thead><tr><th>Event</th><th>Date</th><th>Status</th><th class="r">Capacity</th>
+             <th class="r">Confirmed</th><th class="r">Attended</th><th class="r">Cancelled</th><th class="r">Total</th></tr></thead>
+  <tbody>
+  {% for e in per_event %}
+    <tr>
+      <td><a href="{{ url_for('event_detail', event_id=e.event_id) }}">{{ e.event_name }}</a></td>
+      <td>{{ e.event_date.strftime('%d %b %Y') }}</td>
+      <td><span class="badge badge-{{ e.status|lower }}">{{ e.status }}</span></td>
+      <td class="r">{{ e.capacity }}</td>
+      <td class="r">{{ e.confirmed }}</td>
+      <td class="r">{{ e.attended }}</td>
+      <td class="r">{{ e.cancelled }}</td>
+      <td class="r">{{ e.total }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<div class="grid2">
+  <div>
+    <h2>Most popular event</h2>
+    <ul>
+      {% for e in popular %}<li>{{ e.event_name }} &mdash; {{ e.seats_taken }} participants</li>
+      {% else %}<li class="muted">No registrations yet.</li>{% endfor %}
+    </ul>
+
+    <h2>Events with no registrations</h2>
+    <ul>
+      {% for e in empty %}<li>{{ e.event_name }} ({{ e.status }})</li>
+      {% else %}<li class="muted">Every event has registrations.</li>{% endfor %}
+    </ul>
+  </div>
+  <div>
+    <h2>Participants in more than one event</h2>
+    <ul>
+      {% for p in multi %}<li><a href="{{ url_for('participant_detail', participant_id=p.participant_id) }}">{{ p.participant_name }}</a> &mdash; {{ p.events_registered }} events</li>
+      {% else %}<li class="muted">None.</li>{% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Database error{% endblock %}
+{% block content %}
+<h1>Cannot talk to the database</h1>
+<div class="flash flash-error">{{ message }}</div>
+<div class="card">
+  <p>Check that:</p>
+  <ol>
+    <li>The MySQL80 service is running (Windows key &rarr; type <em>Services</em> &rarr; MySQL80 &rarr; Start).</li>
+    <li>You ran <code>sql/01_schema.sql</code> and <code>sql/02_sample_data.sql</code> in MySQL Workbench.</li>
+    <li>The values in <code>web/.env</code> (DB_USER, DB_PASSWORD, DB_NAME) are correct.</li>
+  </ol>
+</div>
+{% endblock %}

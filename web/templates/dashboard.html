@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Dashboard</h1>
+
+<div class="stats">
+  <div class="stat"><span class="num">{{ totals.events }}</span><span>Total events</span></div>
+  <div class="stat"><span class="num">{{ totals.upcoming }}</span><span>Upcoming events</span></div>
+  <div class="stat"><span class="num">{{ totals.participants }}</span><span>Participants</span></div>
+  <div class="stat"><span class="num">{{ totals.registrations }}</span><span>Active registrations</span></div>
+</div>
+
+<h2>Next upcoming events</h2>
+<table>
+  <thead><tr><th>Event</th><th>Date</th><th>Venue</th><th class="r">Seats left</th></tr></thead>
+  <tbody>
+  {% for e in upcoming %}
+    <tr>
+      <td><a href="{{ url_for('event_detail', event_id=e.event_id) }}">{{ e.event_name }}</a></td>
+      <td>{{ e.event_date.strftime('%d %b %Y') }}</td>
+      <td>{{ e.venue }}</td>
+      <td class="r">{% if e.available_seats == 0 %}<span class="badge badge-full">Full</span>{% else %}{{ e.available_seats }} / {{ e.capacity }}{% endif %}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="4" class="muted">No upcoming events.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h2>Latest registrations</h2>
+<table>
+  <thead><tr><th>When</th><th>Participant</th><th>Event</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for r in recent %}
+    <tr>
+      <td>{{ r.registration_date.strftime('%d %b %Y') }}</td>
+      <td>{{ r.participant_name }}</td>
+      <td>{{ r.event_name }}</td>
+      <td><span class="badge badge-{{ r.registration_status|lower }}">{{ r.registration_status }}</span></td>
+    </tr>
+  {% else %}
+    <tr><td colspan="4" class="muted">No registrations yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
